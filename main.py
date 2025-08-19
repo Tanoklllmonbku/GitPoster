@@ -1,4 +1,3 @@
-# В основном файле app.py
 from GUI.git_manager import GitManager
 from PyQt6.QtWidgets import QApplication
 
