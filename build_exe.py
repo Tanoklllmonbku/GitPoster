@@ -19,7 +19,7 @@ if not ICON_PATH.exists():
 
 cmd = [
     "pyinstaller",
-    "--name=DocReator",                    # Имя приложения
+    "--name=GitPoster",                    # Имя приложения
     "--onefile",                           # В один файл
     "--windowed",                          # Без консоли (для GUI)
     f"--icon={ICON_PATH}",                 # Иконка

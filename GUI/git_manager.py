@@ -1,7 +1,6 @@
 # gui/git_manager.py
 import subprocess
 from pathlib import Path
-import os
 from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import (
     QApplication, QWidget, QVBoxLayout, QHBoxLayout,
