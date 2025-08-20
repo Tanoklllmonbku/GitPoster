@@ -22,7 +22,7 @@ class ColoredFormatter(logging.Formatter):
 
 
 def setup_logger(
-    name: str = 'DocReator',
+    name: str = 'GitPoster',
     log_file: str = None,
     level: int = logging.INFO
 ) -> logging.Logger:
@@ -64,4 +64,4 @@ def setup_logger(
 def get_logger() -> logging.Logger:
     """Получение глобального логгера проекта"""
     log_file = os.path.join('logs', 'system.log')
-    return setup_logger('DocReator', log_file)
+    return setup_logger('GitPoster', log_file)
