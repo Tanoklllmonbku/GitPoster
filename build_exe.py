@@ -5,7 +5,7 @@ from pathlib import Path
 
 # Пути
 PROJECT_DIR = Path(__file__).parent
-SRC_DIR = PROJECT_DIR / "main.py"  # путь к главному файлу GUI
+SRC_DIR = PROJECT_DIR / "app.py"  # путь к главному файлу GUI
 ICON_PATH = PROJECT_DIR / "GUI" / "Icons" / "Icon.ico"  # путь к иконке
 DIST_DIR = PROJECT_DIR / "dist"
 BUILD_DIR = PROJECT_DIR / "build"
