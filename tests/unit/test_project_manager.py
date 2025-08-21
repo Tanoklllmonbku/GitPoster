@@ -1,38 +1,45 @@
 # tests/unit/test_project_manager.py
 import pytest
 from unittest.mock import MagicMock
-from pathlib import Path
-from core import ProjectManager
-from utils import get_logger
+from core.project_manager import ProjectManager
+from utils.logger import get_logger
 
-logger = get_logger("PyTests")
+# Создаём тестовый логгер
+logger = get_logger("Tests")
 
-class MockExecutor:
-    def execute(self, cmd, cwd):
-        # Имитируем успешный результат
-        return True, "", ""
 
-def test_project_manager_init():
-    pm = ProjectManager(Path("/test"), logger)
-    assert pm.project_dir == Path("/test")
+def test_project_manager_init(tmp_path):
+    pm = ProjectManager(tmp_path, logger=logger)
+    assert pm.project_dir == tmp_path
 
-def test_is_git_repo(tmp_path, monkeypatch):
-    pm = ProjectManager(tmp_path, logger)
-    pm.executor = MockExecutor()
-    # Просто проверяем, что метод не падает
-    result = pm.is_git_repo()
-    # В реальности — можно мокнуть результат
-    assert isinstance(result, bool)
 
-def test_initialize_calls_git_init(monkeypatch):
+def test_initialize_calls_git_init(tmp_path):
+    # Используем временную папку
     mock_executor = MagicMock()
     mock_executor.execute.return_value = (True, "", "")
 
-    with monkeypatch.context() as m:
+    # Подменяем GitExecutor
+    with pytest.MonkeyPatch().context() as m:
         m.setattr("core.project_manager.GitExecutor", lambda: mock_executor)
-        pm = ProjectManager(Path("/test"), logger)
-        pm.executor = mock_executor
-        result = pm.initialize("https://github.com/user/repo.git", "User", "user@example.com")
 
+        # Создаём ProjectManager в реальной существующей папке
+        pm = ProjectManager(tmp_path, logger=logger)
+        pm.executor = mock_executor
+
+        # Выполняем инициализацию
+        result = pm.initialize(
+            repo_url="https://github.com/user/repo.git",
+            name="User",
+            email="user@example.com"
+        )
+
+    # Проверяем, что всё прошло без ошибок
     assert result["success"]
-    assert mock_executor.execute.called
+
+    # Проверяем, что README.md создан
+    readme_path = tmp_path / "README.md"
+    assert readme_path.exists()
+    assert readme_path.read_text(encoding='utf-8').startswith("# ")
+
+    # Проверяем, что git init был вызван
+    mock_executor.execute.assert_called()
