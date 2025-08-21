@@ -20,6 +20,10 @@ class MainWindow(QWidget):
         self.project_manager: ProjectManager = None
         self.setWindowIcon(QIcon(icon_path))
         self.init_ui()
+        config = FileHandler.load_config(CONFIG_PATH)
+        self.name_input.setText(config.get("user.name", ""))
+        self.email_input.setText(config.get("user.email", ""))
+        self.repo_url_input.setText(config.get("last_repo_url", ""))
 
     def init_ui(self):
         self.setWindowTitle("Git Manager — Умный контроль версий")
@@ -70,9 +74,20 @@ class MainWindow(QWidget):
 
         # --- Вкладка: Инициализация ---
         init_layout = QVBoxLayout()
-        init_layout.addWidget(QLabel("Ссылка на репозиторий (опционально):"))
+        init_layout.addWidget(QLabel("Имя:"))
+        self.name_input = QLineEdit()
+        self.name_input.setPlaceholderText("Ваше имя (для Git)")
+        init_layout.addWidget(self.name_input)
+
+        init_layout.addWidget(QLabel("Email:"))
+        self.email_input = QLineEdit()
+        self.email_input.setPlaceholderText("Ваш email (для Git)")
+        init_layout.addWidget(self.email_input)
+
+        init_layout.addWidget(QLabel("Ссылка на репозиторий:"))
         self.repo_url_input = QLineEdit()
-        self.repo_url_input.setPlaceholderText("https://github.com/ваш-юзер/репозиторий.git")
+        self.repo_url_input.setPlaceholderText("https://github.com/user/repo.git")
+        init_layout.addWidget(self.repo_url_input)
 
         # ✅ Загружаем последнюю ссылку через FileHandler
         try:
@@ -147,7 +162,24 @@ class MainWindow(QWidget):
             except Exception as e:
                 self.logger.error(f"Не удалось сохранить конфиг: {e}")
 
-        result = self.project_manager.initialize(repo_url)
+        # В initialize_git()
+        name = self.name_input.text().strip()
+        email = self.email_input.text().strip()
+        repo_url = self.repo_url_input.text().strip()
+
+        if not name or not email:
+            QMessageBox.warning(self, "Внимание", "Введите имя и email")
+            return
+
+        # Сохраняем
+        FileHandler.save_config({
+            "user.name": name,
+            "user.email": email,
+            "last_repo_url": repo_url
+        }, CONFIG_PATH)
+
+        # Выполняем
+        result = self.project_manager.initialize(repo_url, name, email)
 
         if result["success"]:
             QMessageBox.information(self, "Готово", "Репозиторий инициализирован!")

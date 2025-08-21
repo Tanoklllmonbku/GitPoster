@@ -36,52 +36,71 @@ class ProjectManager:
         success, _, _ = self.executor.execute(cmd, cwd)
         return success
 
-    def initialize(self, repo_url: str = "") -> dict:
+    def initialize(self, repo_url: str, name: str, email: str) -> dict:
         self.logger.info(f"Инициализация репозитория: {self.project_dir}")
 
-        # Загружаем конфиг
-        config = FileHandler.load_config(CONFIG_PATH)
-        name = config.get("default_name", "User")
-        email = config.get("default_email", "user@example.com")
-
-        # git init
+        # 1. git init
         cmd, cwd = init.git_init(self.project_dir)
         success, out, err = self.executor.execute(cmd, cwd)
         if not success:
-            error_msg = f"git init failed: {err}"
-            self.logger.error(error_msg)
+            self.logger.error(f"❌ git init failed: {err}")
             return {"success": False, "error": err}
         self.logger.info("✅ git init — успешно")
 
-        # .gitignore
-        gitignore = self.project_dir / '.gitignore'
-        if not gitignore.exists():
-            gitignore.write_text(get_default_gitignore(), encoding='utf-8')
-            self.logger.info("✅ .gitignore создан")
+        # 2. Создаём README.md
+        readme_path = self.project_dir / "README.md"
+        if not readme_path.exists():
+            readme_path.write_text("# " + self.project_dir.name, encoding='utf-8')
+            self.logger.info("✅ README.md создан")
 
-        # Настройка пользователя
+        # 3. Настройка пользователя
         self._run_silent(["git", "config", "user.name", name])
         self._run_silent(["git", "config", "user.email", email])
         self.logger.info(f"✅ Настроены: {name} <{email}>")
 
-        # Добавляем и коммитим всё
-        cmd, cwd = add.git_add_files(['.'], self.project_dir)
-        self.executor.execute(cmd, cwd)
-        cmd, cwd = commit.git_commit("docs: initial commit", self.project_dir)
-        self.executor.execute(cmd, cwd)
-        self.logger.info("✅ Все файлы добавлены и закоммичены")
+        # 4. git add README.md
+        cmd, cwd = add.git_add_files(["README.md"], self.project_dir)
+        success, out, err = self.executor.execute(cmd, cwd)
+        if not success:
+            self.logger.error(f"❌ git add failed: {err}")
+            return {"success": False, "error": err}
+        self.logger.info("✅ README.md добавлен")
 
-        # Привязка к удалённому репозиторию
+        # 5. git commit
+        cmd, cwd = commit.git_commit("first commit", self.project_dir)
+        success, out, err = self.executor.execute(cmd, cwd)
+        if not success:
+            self.logger.error(f"❌ git commit failed: {err}")
+            return {"success": False, "error": err}
+        self.logger.info("✅ Коммит: first commit")
+
+        # 6. git branch -M main
+        cmd, cwd = ["git", "branch", "-M", "main"], self.project_dir
+        success, out, err = self.executor.execute(cmd, cwd)
+        if not success:
+            self.logger.error(f"❌ git branch -M main failed: {err}")
+            return {"success": False, "error": err}
+        self.logger.info("✅ Ветка переименована в main")
+
+        # 7. git remote add origin {url}
         if repo_url.strip():
             cmd, cwd = remote.git_remote_add_origin(repo_url.strip(), self.project_dir)
             success, out, err = self.executor.execute(cmd, cwd)
-            if success:
-                self.logger.info(f"✅ Привязан к удалённому репозиторию: {repo_url}")
+            if not success:
+                self.logger.warning(f"⚠️ Не удалось добавить remote: {err}")
             else:
-                self.logger.warning(f"⚠️ Не удалось привязать к репозиторию: {err}")
+                self.logger.info(f"✅ Привязан к: {repo_url}")
+
+        # 8. git push -u origin main
+        if repo_url.strip():
+            cmd, cwd = ["git", "push", "-u", "origin", "main"], self.project_dir
+            success, out, err = self.executor.execute(cmd, cwd)
+            if not success:
+                self.logger.error(f"❌ git push failed: {err}")
+                return {"success": False, "error": err}
+            self.logger.info("✅ Первая загрузка на GitHub — успешна")
 
         return {"success": True}
-
     def get_status(self) -> list:
         cmd, cwd = status.git_status_porcelain(self.project_dir)
         success, stdout, stderr = self.executor.execute(cmd, cwd)
