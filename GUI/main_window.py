@@ -6,19 +6,17 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtGui import QIcon
 from core.project_manager import ProjectManager
-from utils.logger import get_logger
 from utils import FileHandler
 from .Icons.import_icons import icon_path
-
-logger = get_logger()
 
 # 📁 Путь к конфигу
 CONFIG_PATH = "config/user_config.json"
 
 
 class MainWindow(QWidget):
-    def __init__(self):
+    def __init__(self, logger):
         super().__init__()
+        self.logger = logger
         self.project_manager: ProjectManager = None
         self.setWindowIcon(QIcon(icon_path))
         self.init_ui()
@@ -81,7 +79,7 @@ class MainWindow(QWidget):
             config = FileHandler.load_config(CONFIG_PATH)
             last_url = config.get("last_repo_url", "")
         except Exception as e:
-            logger.warning(f"Не удалось загрузить конфиг: {e}")
+            self.logger.warning(f"Не удалось загрузить конфиг: {e}")
             last_url = ""
         self.repo_url_input.setText(last_url)
 
@@ -103,13 +101,13 @@ class MainWindow(QWidget):
     def select_folder(self):
         folder = QFileDialog.getExistingDirectory(self, "Выберите папку проекта")
         if folder:
-            self.project_manager = ProjectManager(folder)
+            self.project_manager = ProjectManager(folder, self.logger)
             self.path_label.setText(folder)
             self.refresh_status()
 
     def refresh_status(self):
         if not self.project_manager:
-            logger.error("Папка проекта не выбрана")
+            self.logger.error("Папка проекта не выбрана")
             return
 
         if not self.project_manager.is_git_repo():
@@ -145,19 +143,19 @@ class MainWindow(QWidget):
         if repo_url:
             try:
                 FileHandler.save_config({"last_repo_url": repo_url}, CONFIG_PATH)
-                logger.info(f"Конфиг сохранён: {repo_url}")
+                self.logger.info(f"Конфиг сохранён: {repo_url}")
             except Exception as e:
-                logger.error(f"Не удалось сохранить конфиг: {e}")
+                self.logger.error(f"Не удалось сохранить конфиг: {e}")
 
         result = self.project_manager.initialize(repo_url)
 
         if result["success"]:
             QMessageBox.information(self, "Готово", "Репозиторий инициализирован!")
-            logger.info("Репозиторий инициализирован успешно")
+            self.logger.info("Репозиторий инициализирован успешно")
             self.refresh_status()
         else:
             QMessageBox.critical(self, "Ошибка", "Не удалось инициализировать репозиторий")
-            logger.error("Ошибка инициализации репозитория")
+            self.logger.error("Ошибка инициализации репозитория")
 
     def commit_and_push(self, push: bool):
         if not self.project_manager:

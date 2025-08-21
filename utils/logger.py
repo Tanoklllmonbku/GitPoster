@@ -1,6 +1,7 @@
 # utils/logger.py
 import logging
 import os
+from logging import LoggerAdapter
 from pathlib import Path
 from logging.handlers import RotatingFileHandler
 
@@ -22,22 +23,21 @@ class ColoredFormatter(logging.Formatter):
 
 
 def setup_logger(
-    name: str = 'GitPoster',
-    log_file: str = None,
-    level: int = logging.INFO
+        version: str,
+        name: str = 'GitPoster',
+        log_file: str = None,
+        level: int = logging.INFO
 ) -> logging.Logger:
     logger = logging.getLogger(name)
     if logger.handlers:
         return logger
 
-    # Форматтер для файла — без цветов
+    # Передаём версию в формат через placeholder
     file_formatter = logging.Formatter(
-        '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+        f'{version} - %(asctime)s - %(name)s - %(levelname)s - %(message)s'
     )
-
-    # Цветной форматтер для консоли
     console_formatter = ColoredFormatter(
-        '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+        f'{version} - %(asctime)s - %(name)s - %(levelname)s - %(message)s'
     )
 
     console_handler = logging.StreamHandler()
@@ -61,7 +61,7 @@ def setup_logger(
     return logger
 
 
-def get_logger() -> logging.Logger:
+def get_logger(version: str) -> logging.Logger:
     """Получение глобального логгера проекта"""
-    log_file = os.path.join('logs', 'system.log')
-    return setup_logger('GitPoster', log_file)
+    log_file = 'logs/system.log'
+    return setup_logger(version, 'GitPoster', log_file)

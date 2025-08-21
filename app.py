@@ -1,4 +1,7 @@
 #app.py
+
+__VERSION__ = "Version_0.2"
+
 import sys
 from pathlib import Path
 from PyQt6.QtWidgets import QApplication
@@ -11,11 +14,11 @@ def ensure_dirs():
 
 def main():
     ensure_dirs()
-    logger = get_logger()
+    logger = get_logger(version=__VERSION__)
     logger.info("Git Manager запущен")
 
     app = QApplication(sys.argv)
-    window = MainWindow()
+    window = MainWindow(logger)
     window.show()
     sys.exit(app.exec())
 
