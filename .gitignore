@@ -57,7 +57,7 @@ logs/
 *.spec
 
 # IDE
-.idea/
+../.idea/
 .vscode/
 *.swp
 *.swo

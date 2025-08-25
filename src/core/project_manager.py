@@ -4,11 +4,9 @@ import os
 from pathlib import Path
 import logging
 
-from commands import init, status, add, commit, push, remote
+from src.commands import init, status, add, commit, push, remote
 from .git_exec import GitExecutor
-from utils.gitignore_temp import get_default_gitignore
-from utils import FileHandler
-
+from src.utils import create_gitignore
 
 CONFIG_PATH = "config/user_config.json"
 ON_WINDOWS = os.name == "nt"
@@ -53,12 +51,18 @@ class ProjectManager:
             readme_path.write_text("# " + self.project_dir.name, encoding='utf-8')
             self.logger.info("✅ README.md создан")
 
-        # 3. Настройка пользователя
+        # 3. Создаём .gitignore
+        gitignore_path = self.project_dir / ".gitignore"
+        if not gitignore_path.exists():
+            create_gitignore(gitignore_path)
+            self.logger.info("✅ .gitignore создан")
+
+        # 4. Настройка пользователя
         self._run_silent(["git", "config", "user.name", name])
         self._run_silent(["git", "config", "user.email", email])
         self.logger.info(f"✅ Настроены: {name} <{email}>")
 
-        # 4. git add README.md
+        # 5. git add README.md
         cmd, cwd = add.git_add_files(["README.md"], self.project_dir)
         success, out, err = self.executor.execute(cmd, cwd)
         if not success:
@@ -66,7 +70,7 @@ class ProjectManager:
             return {"success": False, "error": err}
         self.logger.info("✅ README.md добавлен")
 
-        # 5. git commit
+        # 6. git commit
         cmd, cwd = commit.git_commit("first commit", self.project_dir)
         success, out, err = self.executor.execute(cmd, cwd)
         if not success:
@@ -74,7 +78,7 @@ class ProjectManager:
             return {"success": False, "error": err}
         self.logger.info("✅ Коммит: first commit")
 
-        # 6. git branch -M main
+        # 7. git branch -M main
         cmd, cwd = ["git", "branch", "-M", "main"], self.project_dir
         success, out, err = self.executor.execute(cmd, cwd)
         if not success:
@@ -82,7 +86,7 @@ class ProjectManager:
             return {"success": False, "error": err}
         self.logger.info("✅ Ветка переименована в main")
 
-        # 7. git remote add origin {url}
+        # 8. git remote add origin {url}
         if repo_url.strip():
             cmd, cwd = remote.git_remote_add_origin(repo_url.strip(), self.project_dir)
             success, out, err = self.executor.execute(cmd, cwd)
@@ -91,7 +95,7 @@ class ProjectManager:
             else:
                 self.logger.info(f"✅ Привязан к: {repo_url}")
 
-        # 8. git push -u origin main
+        # 9. git push -u origin main
         if repo_url.strip():
             cmd, cwd = ["git", "push", "-u", "origin", "main"], self.project_dir
             success, out, err = self.executor.execute(cmd, cwd)

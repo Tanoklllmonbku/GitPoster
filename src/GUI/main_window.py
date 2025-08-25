@@ -5,8 +5,8 @@ from PyQt6.QtWidgets import (
     QTabWidget, QMessageBox
 )
 from PyQt6.QtGui import QIcon
-from core.project_manager import ProjectManager
-from utils import FileHandler
+from src.core import ProjectManager
+from src.utils import FileHandler
 from .Icons.import_icons import icon_path
 
 # 📁 Путь к конфигу
@@ -154,7 +154,6 @@ class MainWindow(QWidget):
 
         repo_url = self.repo_url_input.text().strip()
 
-        # ✅ Сохраняем URL через FileHandler
         if repo_url:
             try:
                 FileHandler.save_config({"last_repo_url": repo_url}, CONFIG_PATH)
@@ -162,7 +161,6 @@ class MainWindow(QWidget):
             except Exception as e:
                 self.logger.error(f"Не удалось сохранить конфиг: {e}")
 
-        # В initialize_git()
         name = self.name_input.text().strip()
         email = self.email_input.text().strip()
         repo_url = self.repo_url_input.text().strip()
@@ -171,14 +169,12 @@ class MainWindow(QWidget):
             QMessageBox.warning(self, "Внимание", "Введите имя и email")
             return
 
-        # Сохраняем
         FileHandler.save_config({
             "user.name": name,
             "user.email": email,
             "last_repo_url": repo_url
         }, CONFIG_PATH)
 
-        # Выполняем
         result = self.project_manager.initialize(repo_url, name, email)
 
         if result["success"]:

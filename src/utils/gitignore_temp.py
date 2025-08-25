@@ -1,4 +1,5 @@
 # utils/gitignore_temp.py
+
 def get_default_gitignore() -> str:
     return """
 # Python
@@ -69,3 +70,10 @@ logs/
 Thumbs.db
 .DS_Store
     """.strip()
+
+def create_gitignore(path):
+    with open(path / ".gitignore", "w", encoding="utf-8") as f:
+        f.write(get_default_gitignore())
+        f.close()
+
+    return "Successfully created .gitignore"
