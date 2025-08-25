@@ -72,7 +72,7 @@ Thumbs.db
     """.strip()
 
 def create_gitignore(path):
-    with open(path / ".gitignore", "w", encoding="utf-8") as f:
+    with open(path, "w", encoding="utf-8") as f:
         f.write(get_default_gitignore())
         f.close()
 

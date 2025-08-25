@@ -53,6 +53,7 @@ class ProjectManager:
 
         # 3. Создаём .gitignore
         gitignore_path = self.project_dir / ".gitignore"
+        print(gitignore_path, self.project_dir)
         if not gitignore_path.exists():
             create_gitignore(gitignore_path)
             self.logger.info("✅ .gitignore создан")
