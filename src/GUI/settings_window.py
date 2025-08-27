@@ -29,7 +29,7 @@ class SettingsWindow(QDialog):
 
         self.theme_combo = QComboBox()
         self.theme_combo.addItems(["Светлая", "Тёмная"])
-        self.theme_combo.setCurrentText("Тёмкая" if self.main_window.current_theme == "dark" else "Светлая")
+        self.theme_combo.setCurrentText("Тёмная" if self.main_window.current_theme == "dark" else "Светлая")
         self.theme_combo.setMinimumHeight(35)
         layout.addWidget(self.theme_combo)
 
@@ -52,7 +52,7 @@ class SettingsWindow(QDialog):
     def apply_settings(self):
         """Применяет выбранные настройки"""
         theme_name = self.theme_combo.currentText()
-        theme_map = {"Светлая": "light", "Тёмкая": "dark"}
+        theme_map = {"Светлая": "light", "Тёмная": "dark"}
 
         self.main_window.apply_theme(theme_map[theme_name])
         self.accept()
