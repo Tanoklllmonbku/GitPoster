@@ -5,9 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="01ec3ee4-0f46-4bff-b29d-e1b93d6b49f6" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/GUI/git_work_window.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/GUI/initialize_git_window.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/GUI/settings_window.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/prod/docs/releases/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/prod/docs/releases/CHANGELOG.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/prod/docs/screenshots/image.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/prod/docs/screenshots/init_tab.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/prod/docs/screenshots/logs.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GUI/main_window.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI/main_window.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/config/user_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/config/user_config.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/core/project_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/project_manager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/gitignore_temp.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/gitignore_temp.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -153,7 +160,8 @@
       <workItem from="1756110997465" duration="4717000" />
       <workItem from="1756121625908" duration="2249000" />
       <workItem from="1756123886345" duration="898000" />
-      <workItem from="1756124793869" duration="1936000" />
+      <workItem from="1756124793869" duration="2139000" />
+      <workItem from="1756298839830" duration="3523000" />
     </task>
     <servers />
   </component>
@@ -173,7 +181,7 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/GitPoster$.coverage" NAME=" Coverage Results" MODIFIED="1755795809304" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/unit" />
-    <SUITE FILE_PATH="coverage/user_config_json$app.coverage" NAME="app Coverage Results" MODIFIED="1756125330112" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
+    <SUITE FILE_PATH="coverage/user_config_json$app.coverage" NAME="app Coverage Results" MODIFIED="1756302366355" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
     <SUITE FILE_PATH="coverage/GitPoster$build_exe.coverage" NAME="build_exe Coverage Results" MODIFIED="1755791441644" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/user_config_json$gitignore_temp.coverage" NAME="gitignore_temp Coverage Results" MODIFIED="1756125289818" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/utils" />
     <SUITE FILE_PATH="coverage/GitPoster$git_manager.coverage" NAME="git_manager Coverage Results" MODIFIED="1755554792177" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/GUI" />

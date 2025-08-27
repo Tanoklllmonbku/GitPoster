@@ -1,222 +1,204 @@
 # gui/main_window.py
 from PyQt6.QtWidgets import (
-    QWidget, QVBoxLayout, QHBoxLayout, QPushButton,
-    QLabel, QFileDialog, QLineEdit, QListWidget,
-    QTabWidget, QMessageBox
+    QWidget, QHBoxLayout, QVBoxLayout, QStackedWidget, QFrame, QPushButton
 )
-from PyQt6.QtGui import QIcon
-from src.core import ProjectManager
-from src.utils import FileHandler
-from .Icons.import_icons import icon_path
-
-# 📁 Путь к конфигу
-CONFIG_PATH = "config/user_config.json"
+from .git_work_window import GitWorkWindow
+from .initialize_git_window import InitializeWindow
+from .settings_window import SettingsWindow
 
 
 class MainWindow(QWidget):
     def __init__(self, logger):
         super().__init__()
         self.logger = logger
-        self.project_manager: ProjectManager = None
-        self.setWindowIcon(QIcon(icon_path))
-        self.init_ui()
-        config = FileHandler.load_config(CONFIG_PATH)
-        self.name_input.setText(config.get("user.name", ""))
-        self.email_input.setText(config.get("user.email", ""))
-        self.repo_url_input.setText(config.get("last_repo_url", ""))
+        self.current_theme = "dark"
+        self.config_path = None
+        self.setup_ui()
+        self.apply_theme(self.current_theme)
 
-    def init_ui(self):
-        self.setWindowTitle("Git Manager — Умный контроль версий")
-        self.resize(700, 550)
+    def setup_ui(self):
+        """Создаёт структуру окна: левая панель, контент, верхняя панель"""
+        self.setWindowTitle("GitPoster — Управление версиями для завода")
+        self.resize(1000, 650)
 
-        layout = QVBoxLayout()
+        # Основной макет без отступов
+        main_layout = QHBoxLayout()
+        main_layout.setContentsMargins(0, 0, 0, 0)
+        main_layout.setSpacing(0)
+        self.setLayout(main_layout)
 
-        tab_widget = QTabWidget()
-        main_tab = QWidget()
-        init_tab = QWidget()
+        # Левая панель инструментов (20% ширины)
+        self.setup_tool_panel(main_layout)
 
-        # --- Основная вкладка ---
-        main_layout = QVBoxLayout()
-        self.path_label = QLabel("Папка не выбрана")
-        btn_select = QPushButton("📁 Выбрать проект")
-        btn_select.clicked.connect(self.select_folder)
-        main_layout.addWidget(self.path_label)
-        main_layout.addWidget(btn_select)
+        # Правая область: верх + контент
+        self.setup_content_area(main_layout)
 
-        self.status_label = QLabel("Git: не инициализирован")
-        self.status_label.setStyleSheet("color: red;")
-        main_layout.addWidget(self.status_label)
+    def setup_tool_panel(self, parent_layout):
+        """Левая панель с иконками-инструментами"""
+        tool_panel = QFrame()
+        tool_panel.setFixedWidth(180)
+        tool_panel.setObjectName("tool_panel")
 
-        main_layout.addWidget(QLabel("Изменённые файлы:"))
-        self.file_list = QListWidget()
-        self.file_list.setSelectionMode(QListWidget.SelectionMode.ExtendedSelection)
-        main_layout.addWidget(self.file_list)
+        tool_layout = QVBoxLayout(tool_panel)
+        tool_layout.setContentsMargins(0, 10, 0, 10)
+        tool_layout.setSpacing(5)
 
-        main_layout.addWidget(QLabel("Сообщение коммита:"))
-        self.commit_msg = QLineEdit()
-        self.commit_msg.setPlaceholderText("Например: feat: добавил GUI")
-        main_layout.addWidget(self.commit_msg)
+        # Кнопки-инструменты
+        self.btn_git_work = self.create_tool_button("🛠️", "Работа с Git")
+        self.btn_initialize = self.create_tool_button("🚀", "Инициализация")
 
-        btn_layout = QHBoxLayout()
-        self.btn_refresh = QPushButton("🔄 Обновить")
-        self.btn_refresh.clicked.connect(self.refresh_status)
-        self.btn_commit_only = QPushButton("💾 Commit")
-        self.btn_commit_only.clicked.connect(lambda: self.commit_and_push(push=False))
-        self.btn_commit_push = QPushButton("✅ Commit & Push")
-        self.btn_commit_push.clicked.connect(lambda: self.commit_and_push(push=True))
+        tool_layout.addWidget(self.btn_git_work)
+        tool_layout.addWidget(self.btn_initialize)
+        tool_layout.addStretch()
 
-        btn_layout.addWidget(self.btn_refresh)
-        btn_layout.addWidget(self.btn_commit_only)
-        btn_layout.addWidget(self.btn_commit_push)
-        main_layout.addLayout(btn_layout)
+        parent_layout.addWidget(tool_panel)
 
-        main_tab.setLayout(main_layout)
+        # Привязка кнопок
+        self.btn_git_work.clicked.connect(lambda: self.switch_content(0))
+        self.btn_initialize.clicked.connect(lambda: self.switch_content(1))
+        self.btn_git_work.setChecked(True)
 
-        # --- Вкладка: Инициализация ---
-        init_layout = QVBoxLayout()
-        init_layout.addWidget(QLabel("Имя:"))
-        self.name_input = QLineEdit()
-        self.name_input.setPlaceholderText("Ваше имя (для Git)")
-        init_layout.addWidget(self.name_input)
+    def setup_content_area(self, parent_layout):
+        """Правая область: верхняя панель + контент"""
+        content_wrapper = QWidget()
+        content_layout = QVBoxLayout(content_wrapper)
+        content_layout.setContentsMargins(0, 0, 0, 0)
 
-        init_layout.addWidget(QLabel("Email:"))
-        self.email_input = QLineEdit()
-        self.email_input.setPlaceholderText("Ваш email (для Git)")
-        init_layout.addWidget(self.email_input)
+        # Верхняя панель (настройки)
+        top_bar = self.create_top_bar()
+        content_layout.addWidget(top_bar)
 
-        init_layout.addWidget(QLabel("Ссылка на репозиторий:"))
-        self.repo_url_input = QLineEdit()
-        self.repo_url_input.setPlaceholderText("https://github.com/user/repo.git")
-        init_layout.addWidget(self.repo_url_input)
+        # Контент (вкладки)
+        self.content_stack = QStackedWidget()
+        self.git_work_window = GitWorkWindow(self, self.logger)
+        self.initialize_window = InitializeWindow(self, self.logger)
 
-        # ✅ Загружаем последнюю ссылку через FileHandler
-        try:
-            config = FileHandler.load_config(CONFIG_PATH)
-            last_url = config.get("last_repo_url", "")
-        except Exception as e:
-            self.logger.warning(f"Не удалось загрузить конфиг: {e}")
-            last_url = ""
-        self.repo_url_input.setText(last_url)
+        self.content_stack.addWidget(self.git_work_window)
+        self.content_stack.addWidget(self.initialize_window)
 
-        init_layout.addWidget(self.repo_url_input)
+        content_layout.addWidget(self.content_stack)
+        parent_layout.addWidget(content_wrapper)
 
-        self.btn_init = QPushButton("🚀 Инициализировать Git")
-        self.btn_init.clicked.connect(self.initialize_git)
-        init_layout.addWidget(self.btn_init)
+    def create_top_bar(self):
+        """Верхняя панель с настройками"""
+        top_bar = QFrame()
+        top_bar.setFixedHeight(40)
+        top_layout = QHBoxLayout(top_bar)
+        top_layout.setContentsMargins(10, 0, 10, 0)
+        top_layout.addStretch()
 
-        init_tab.setLayout(init_layout)
-        tab_widget.addTab(main_tab, "Работа с Git")
-        tab_widget.addTab(init_tab, "Инициализация")
-        layout.addWidget(tab_widget)
+        btn_settings = QPushButton("⚙️ Настройки")
+        btn_settings.setFixedSize(100, 30)
+        btn_settings.clicked.connect(self.open_settings)
+        top_layout.addWidget(btn_settings)
 
-        self.setLayout(layout)
-        self.btn_commit_push.setEnabled(False)
-        self.btn_commit_only.setEnabled(False)
+        return top_bar
 
-    def select_folder(self):
-        folder = QFileDialog.getExistingDirectory(self, "Выберите папку проекта")
-        if folder:
-            self.project_manager = ProjectManager(folder, self.logger)
-            self.path_label.setText(folder)
-            self.refresh_status()
+    def create_tool_button(self, icon, text):
+        """Создаёт кнопку для левой панели"""
+        btn = QPushButton(f" {icon}  {text}")
+        btn.setCheckable(True)
+        btn.setChecked(False)
+        btn.setProperty("tool_button", True)
+        btn.setMinimumHeight(40)
+        return btn
 
-    def refresh_status(self):
-        if not self.project_manager:
-            self.logger.error("Папка проекта не выбрана")
-            return
+    def switch_content(self, index):
+        """Переключает контент в правой области"""
+        self.content_stack.setCurrentIndex(index)
+        self.btn_git_work.setChecked(index == 0)
+        self.btn_initialize.setChecked(index == 1)
 
-        if not self.project_manager.is_git_repo():
-            self.status_label.setText("Git: не инициализирован")
-            self.status_label.setStyleSheet("color: red;")
-            self.btn_commit_push.setEnabled(False)
-            self.btn_commit_only.setEnabled(False)
-            self.file_list.clear()
-            self.file_list.addItem("Репозиторий не инициализирован. Перейдите на вкладку 'Инициализация'")
-            return
+    def open_settings(self):
+        """Открывает окно настроек"""
+        settings_window = SettingsWindow(self)
+        settings_window.exec()
 
-        self.status_label.setText("Git: инициализирован")
-        self.status_label.setStyleSheet("color: green;")
-        self.btn_commit_push.setEnabled(True)
-        self.btn_commit_only.setEnabled(True)
+    def apply_theme(self, theme_name):
+        """Применяет цветовую тему"""
+        self.current_theme = theme_name
+        themes = {
+            "light": {
+                "background": "#F5F7FA",
+                "panel_bg": "#E4E7EB",
+                "text": "#2D3748",
+                "accent": "#3B82F6",
+                "border": "#CBD5E0"
+            },
+            "dark": {
+                "background": "#1E293B",
+                "panel_bg": "#1E293B",
+                "text": "#E2E8F0",
+                "accent": "#3B82F6",
+                "border": "#334155"
+            }
+        }
 
-        status_lines = self.project_manager.get_status()
-        self.file_list.clear()
-        if not status_lines or (len(status_lines) == 1 and not status_lines[0]):
-            self.file_list.addItem("Нет изменённых файлов")
-        else:
-            for line in status_lines:
-                self.file_list.addItem(line)
+        theme = themes[theme_name]
 
-    def initialize_git(self):
-        if not self.project_manager:
-            QMessageBox.critical(self, "Ошибка", "Выберите папку проекта")
-            return
+        self.setStyleSheet(f"""
+            QWidget {{
+                background-color: {theme['background']};
+                color: {theme['text']};
+                font-family: 'Segoe UI', Arial, sans-serif;
+                font-size: 14px;
+            }}
 
-        repo_url = self.repo_url_input.text().strip()
+            #tool_panel {{
+                background-color: {theme['panel_bg']};
+                border-right: 1px solid {theme['border']};
+            }}
 
-        if repo_url:
-            try:
-                FileHandler.save_config({"last_repo_url": repo_url}, CONFIG_PATH)
-                self.logger.info(f"Конфиг сохранён: {repo_url}")
-            except Exception as e:
-                self.logger.error(f"Не удалось сохранить конфиг: {e}")
+            QPushButton[tool_button="true"] {{
+                background-color: transparent;
+                border: none;
+                border-radius: 4px;
+                padding: 10px;
+                font-size: 15px;
+                text-align: left;
+                qproperty-iconSize: 24px;
+                height: 40px;
+            }}
 
-        name = self.name_input.text().strip()
-        email = self.email_input.text().strip()
-        repo_url = self.repo_url_input.text().strip()
+            QPushButton[tool_button="true"]:checked {{
+                background-color: {theme['accent']};
+                color: white;
+            }}
 
-        if not name or not email:
-            QMessageBox.warning(self, "Внимание", "Введите имя и email")
-            return
+            QPushButton[tool_button="true"]:hover:!checked {{
+                background-color: {self.lighten_color(theme['accent'], 15)};
+            }}
 
-        FileHandler.save_config({
-            "user.name": name,
-            "user.email": email,
-            "last_repo_url": repo_url
-        }, CONFIG_PATH)
+            QFrame {{
+                border: none;
+            }}
 
-        result = self.project_manager.initialize(repo_url, name, email)
+            QTabWidget::pane {{
+                border: 1px solid {theme['border']};
+                border-radius: 4px;
+                background: {theme['background']};
+            }}
 
-        if result["success"]:
-            QMessageBox.information(self, "Готово", "Репозиторий инициализирован!")
-            self.logger.info("Репозиторий инициализирован успешно")
-            self.refresh_status()
-        else:
-            QMessageBox.critical(self, "Ошибка", "Не удалось инициализировать репозиторий")
-            self.logger.error("Ошибка инициализации репозитория")
+            QTabBar::tab {{
+                background: transparent;
+                padding: 8px 16px;
+                margin-right: 2px;
+                border: none;
+                border-top-left-radius: 4px;
+                border-top-right-radius: 4px;
+            }}
 
-    def commit_and_push(self, push: bool):
-        if not self.project_manager:
-            QMessageBox.critical(self, "Ошибка", "Выберите папку проекта")
-            return
+            QTabBar::tab:selected {{
+                background: {theme['accent']};
+                color: white;
+            }}
+        """)
 
-        msg = self.commit_msg.text().strip()
-        if not msg:
-            QMessageBox.warning(self, "Внимание", "Введите сообщение коммита")
-            return
+        self.tool_panel = self.findChild(QFrame, "tool_panel")
+        if self.tool_panel:
+            self.tool_panel.setObjectName("tool_panel")
 
-        selected_items = self.file_list.selectedItems()
-        if not selected_items:
-            QMessageBox.warning(self, "Внимание", "Выберите файлы для коммита")
-            return
-
-        files_to_commit = []
-        for item in selected_items:
-            text = item.text().strip()
-            if text.startswith(("A ", "M ", "D ", "??")):
-                filename = text.split(" ", 1)[1]
-                files_to_commit.append(filename)
-
-        result = self.project_manager.commit_files(files_to_commit, msg)
-        if not result["success"]:
-            QMessageBox.critical(self, "Ошибка", f"Ошибка коммита:\n{result['error']}")
-            return
-
-        if push:
-            result = self.project_manager.push()
-            if not result["success"]:
-                QMessageBox.critical(self, "Ошибка", f"Ошибка push:\n{result['error']}")
-                return
-
-        QMessageBox.information(self, "Готово", "Коммит выполнен!")
-        self.refresh_status()
+    def lighten_color(self, hex_color, percent):
+        """Светлее цвета для ховера"""
+        # Упрощённая реализация
+        return hex_color[:-2] + "40"
