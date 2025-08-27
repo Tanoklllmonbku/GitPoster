@@ -4,7 +4,7 @@ import os
 from pathlib import Path
 import logging
 
-from src.commands import init, status, add, commit, push, remote
+from .commands import push, commit, init, remote, add, status
 from .git_exec import GitExecutor
 from src.utils import create_gitignore
 

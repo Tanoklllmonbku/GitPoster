@@ -18,7 +18,7 @@ class MainWindow(QWidget):
 
     def setup_ui(self):
         """Создаёт структуру окна: левая панель, контент, верхняя панель"""
-        self.setWindowTitle("GitPoster — Управление версиями для завода")
+        self.setWindowTitle("GitPoster — Управление версиями")
         self.resize(1000, 650)
 
         # Основной макет без отступов
