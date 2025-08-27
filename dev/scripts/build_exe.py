@@ -4,11 +4,12 @@ import sys
 from pathlib import Path
 
 # Пути
-PROJECT_DIR = Path(__file__).parent
-SRC_DIR = PROJECT_DIR / "app.py"  # путь к главному файлу GUI
-ICON_PATH = PROJECT_DIR / "GUI" / "Icons" / "Icon.ico"  # путь к иконке
-DIST_DIR = PROJECT_DIR / "dist"
-BUILD_DIR = PROJECT_DIR / "build"
+PROJECT_DIR = Path("D:\проекты\доппроекты\GitPoster")
+print(PROJECT_DIR)
+SRC_DIR = PROJECT_DIR / "src" / "app.py"  # путь к главному файлу GUI
+ICON_PATH = PROJECT_DIR / "src" / "GUI" / "Icons" / "Icon.ico"  # путь к иконке
+DIST_DIR = PROJECT_DIR / "prod" / "dist"
+BUILD_DIR = PROJECT_DIR / "prod" / "build"
 
 # Проверка: существует ли иконка
 if not ICON_PATH.exists():

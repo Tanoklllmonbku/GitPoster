@@ -7,9 +7,9 @@ import sys
 import os
 from pathlib import Path
 from PyQt6.QtWidgets import QApplication
-from GUI import MainWindow
-from utils import get_logger
-from utils import FileHandler
+from src.GUI import MainWindow
+from src.utils import get_logger
+from src.utils import FileHandler
 
 def create_base_cfg():
     base_cfg = {
