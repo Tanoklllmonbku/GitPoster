@@ -1,24 +1,12 @@
 # core/project_manager.py
-import subprocess
-import os
 from pathlib import Path
 import logging
 
-from .commands import push, commit, init, remote, add, status
+from .commands.BaseCommands import add, commit, init, push, remote, status
 from .git_exec import GitExecutor
 from src.utils import create_gitignore
 
 CONFIG_PATH = "config/user_config.json"
-ON_WINDOWS = os.name == "nt"
-
-def create_startupinfo():
-    """Скрывает окно консоли при использовании subprocess на Windows"""
-    if ON_WINDOWS:
-        startupinfo = subprocess.STARTUPINFO()
-        startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
-        startupinfo.wShowWindow = subprocess.SW_HIDE
-        return startupinfo
-    return None
 
 
 class ProjectManager:

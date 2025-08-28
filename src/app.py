@@ -1,6 +1,6 @@
 #app.py
 
-VERSION = "Version_0.2"
+VERSION = "Version_0.2.1"
 BASE_CFG_PATH = "config/user_config.json"
 
 import sys

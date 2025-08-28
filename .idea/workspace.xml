@@ -5,9 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="01ec3ee4-0f46-4bff-b29d-e1b93d6b49f6" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/core/commands/command.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/scripts/build_exe.py" beforeDir="false" afterPath="$PROJECT_DIR$/dev/scripts/build_exe.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/prod/dist/GitPoster.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/prod/docs/releases/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/prod/docs/releases/CHANGELOG.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/core/commands/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/commands/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/core/git_exec.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/git_exec.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -156,7 +159,7 @@
       <workItem from="1756121625908" duration="2249000" />
       <workItem from="1756123886345" duration="898000" />
       <workItem from="1756124793869" duration="2139000" />
-      <workItem from="1756298839830" duration="6465000" />
+      <workItem from="1756298839830" duration="15250000" />
     </task>
     <servers />
   </component>
@@ -176,12 +179,12 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/GitPoster$.coverage" NAME=" Coverage Results" MODIFIED="1755795809304" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/unit" />
-    <SUITE FILE_PATH="coverage/user_config_json$app.coverage" NAME="app Coverage Results" MODIFIED="1756304751726" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
+    <SUITE FILE_PATH="coverage/user_config_json$app.coverage" NAME="app Coverage Results" MODIFIED="1756328679250" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
     <SUITE FILE_PATH="coverage/GitPoster$build_exe.coverage" NAME="build_exe Coverage Results" MODIFIED="1755791441644" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/user_config_json$gitignore_temp.coverage" NAME="gitignore_temp Coverage Results" MODIFIED="1756125289818" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/utils" />
     <SUITE FILE_PATH="coverage/user_config_json$settings_window.coverage" NAME="settings_window Coverage Results" MODIFIED="1756302543345" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/GUI" />
     <SUITE FILE_PATH="coverage/GitPoster$git_manager.coverage" NAME="git_manager Coverage Results" MODIFIED="1755554792177" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/GUI" />
-    <SUITE FILE_PATH="coverage/user_config_json$build_exe.coverage" NAME="build_exe Coverage Results" MODIFIED="1756304348812" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/dev/scripts" />
+    <SUITE FILE_PATH="coverage/user_config_json$build_exe.coverage" NAME="build_exe Coverage Results" MODIFIED="1756305416415" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/dev/scripts" />
     <SUITE FILE_PATH="coverage/GitPoster$app.coverage" NAME="app Coverage Results" MODIFIED="1755791323908" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/GitPoster$python__m_pytest.coverage" NAME="python -m pytest Coverage Results" MODIFIED="1755795148926" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
     <SUITE FILE_PATH="coverage/GitPoster$import_icons.coverage" NAME="import_icons Coverage Results" MODIFIED="1755554837964" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/GUI/Icons" />
