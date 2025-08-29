@@ -2,6 +2,7 @@
 import logging
 import os
 from logging import LoggerAdapter
+import inspect
 from pathlib import Path
 from logging.handlers import RotatingFileHandler
 
@@ -34,10 +35,10 @@ def setup_logger(
 
     # Передаём версию в формат через placeholder
     file_formatter = logging.Formatter(
-        f'{version} - %(asctime)s - %(name)s - %(levelname)s - %(message)s'
+        f'{version} - %(cls)s - %(func)s - %(asctime)s - %(name)s - %(levelname)s - %(message)s'
     )
     console_formatter = ColoredFormatter(
-        f'{version} - %(asctime)s - %(name)s - %(levelname)s - %(message)s'
+        f'{version} - %(cls)s - %(func)s - %(asctime)s - %(name)s - %(levelname)s - %(message)s'
     )
 
     console_handler = logging.StreamHandler()
@@ -60,6 +61,16 @@ def setup_logger(
     logger.setLevel(level)
     return logger
 
+
+class ContextFilter:
+    """Class for filtering logging context in subfiles for detecting callable class and function"""
+    def filter(self, record: logging.LogRecord) -> bool:
+        frame = inspect.currentframe().f_back
+        while frame:
+            co_name = frame.f_code.co_name
+            instanse = frame.f_locals.get("self")
+            if instanse:
+                pass
 
 def get_logger(version: str) -> logging.Logger:
     """Получение глобального логгера проекта"""

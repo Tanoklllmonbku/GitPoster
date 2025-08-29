@@ -9,7 +9,7 @@ from .settings_window import SettingsWindow
 
 class MainWindow(QWidget):
     def __init__(self, logger):
-        super().__init__()
+        super().__init__(parent=None)
         self.logger = logger
         self.current_theme = "dark"
         self.config_path = None
@@ -27,15 +27,13 @@ class MainWindow(QWidget):
         main_layout.setSpacing(0)
         self.setLayout(main_layout)
 
-        # Левая панель инструментов (20% ширины)
         self.setup_tool_panel(main_layout)
 
-        # Правая область: верх + контент
         self.setup_content_area(main_layout)
 
     def setup_tool_panel(self, parent_layout):
         """Левая панель с иконками-инструментами"""
-        tool_panel = QFrame()
+        tool_panel = QFrame(parent=None)
         tool_panel.setFixedWidth(180)
         tool_panel.setObjectName("tool_panel")
 
@@ -60,7 +58,7 @@ class MainWindow(QWidget):
 
     def setup_content_area(self, parent_layout):
         """Правая область: верхняя панель + контент"""
-        content_wrapper = QWidget()
+        content_wrapper = QWidget(parent=None)
         content_layout = QVBoxLayout(content_wrapper)
         content_layout.setContentsMargins(0, 0, 0, 0)
 
@@ -69,7 +67,7 @@ class MainWindow(QWidget):
         content_layout.addWidget(top_bar)
 
         # Контент (вкладки)
-        self.content_stack = QStackedWidget()
+        self.content_stack = QStackedWidget(parent=None)
         self.git_work_window = GitWorkWindow(self, self.logger)
         self.initialize_window = InitializeWindow(self, self.logger)
 
@@ -81,7 +79,7 @@ class MainWindow(QWidget):
 
     def create_top_bar(self):
         """Верхняя панель с настройками"""
-        top_bar = QFrame()
+        top_bar = QFrame(parent=None)
         top_bar.setFixedHeight(40)
         top_layout = QHBoxLayout(top_bar)
         top_layout.setContentsMargins(10, 0, 10, 0)
