@@ -6,10 +6,10 @@ from src.core.commands.AbsClass import CommandFormat, BaseCommand
 from src.core.commands import CommandFactory
 
 
-@CommandFactory.reg('init')
+@CommandFactory.reg("Init")
 class Init(BaseCommand):
-    def __init__(self, parameters):
-        super().__init__()
+    def __init__(self, parameters:dict):
+        super().__init__(parameters)
         self.cwd = parameters.get("cwd")
 
     def execute(self) -> CommandFormat:

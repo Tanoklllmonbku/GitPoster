@@ -3,9 +3,9 @@ from src.core.commands import CommandFactory
 
 
 @CommandFactory.reg('clone')
-class Commit(BaseCommand):
-    def __init__(self, parameters):
-        super().__init__()
+class Clone(BaseCommand):
+    def __init__(self, parameters:dict):
+        super().__init__(parameters)
         self.url = parameters.get("url")
         self.cwd = parameters.get("cwd")
 

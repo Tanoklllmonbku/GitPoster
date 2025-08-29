@@ -4,8 +4,8 @@ from .command_format import CommandFormat
 
 class BaseCommand(ABC):
     """Interface for using git commands"""
-    def __init__(self, **kwargs):
-        self.kwargs = kwargs
+    def __init__(self, parameters):
+        self.parameters = parameters
 
     def __call__(self) -> CommandFormat:
         return self.execute()
@@ -13,4 +13,3 @@ class BaseCommand(ABC):
     @abstractmethod
     def execute(self) -> CommandFormat:
         pass # Executing logic (In children)
-

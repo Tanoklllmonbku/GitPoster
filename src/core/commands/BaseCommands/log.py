@@ -3,11 +3,13 @@ from src.core.commands import CommandFactory
 
 
 @CommandFactory.reg('log')
-class Commit(BaseCommand):
-    def __init__(self, parameters):
-        super().__init__()
+class Log(BaseCommand):
+    def __init__(self, parameters:dict):
+        super().__init__(parameters)
         self.cmd = parameters.get("cmd")
         self.cwd = parameters.get("cwd")
 
     def execute(self) -> CommandFormat:
-        return CommandFormat(["git", "log", self.cmd], self.cwd)
+        return CommandFormat(["git", "log"] + self.cmd, self.cwd)
+
+

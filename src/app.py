@@ -1,8 +1,4 @@
 #app.py
-
-VERSION = "Version_0.2.1"
-BASE_CFG_PATH = "config/user_config.json"
-
 import sys
 import os
 from pathlib import Path
@@ -10,6 +6,9 @@ from PyQt6.QtWidgets import QApplication
 from src.GUI import MainWindow
 from src.utils import get_logger
 from src.utils import FileHandler
+
+VERSION = "Version_0.2.1"
+BASE_CFG_PATH = "config/user_config.json"
 
 def create_base_cfg():
     base_cfg = {

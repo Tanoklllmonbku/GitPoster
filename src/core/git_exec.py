@@ -2,8 +2,7 @@
 import subprocess
 from typing import List, Tuple
 import os
-from src.utils import FileHandler
-from commands.AbsClass import CommandFormat
+from .commands.AbsClass import CommandFormat
 
 ON_WINDOWS = os.name == "nt"
 

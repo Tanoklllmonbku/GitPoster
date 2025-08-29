@@ -7,8 +7,8 @@ from src.core.commands import CommandFactory
 
 @CommandFactory.reg('commit')
 class Commit(BaseCommand):
-    def __init__(self, parameters):
-        super().__init__()
+    def __init__(self, parameters:dict):
+        super().__init__(parameters)
         self.message = parameters.get("message")
         self.cwd = parameters.get("cwd")
 

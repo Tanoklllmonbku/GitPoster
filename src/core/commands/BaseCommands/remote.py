@@ -9,8 +9,8 @@ from src.core.commands import CommandFactory
 
 @CommandFactory.reg('remote_add_origin')
 class RemoteAddOrigin(BaseCommand):
-    def __init__(self, parameters):
-        super().__init__()
+    def __init__(self, parameters:dict):
+        super().__init__(parameters)
         self.url = parameters.get('url')
         self.cwd = parameters.get("cwd")
 
