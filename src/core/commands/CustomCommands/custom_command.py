@@ -1,10 +1,14 @@
-from src.core.commands.AbsClass import BaseCommand, CommandFormat
-from src.core.commands import CommandFactory
+from src.core.commands import BaseCommand, CommandFormat
 
+class CustomCommand(BaseCommand):
+    name:str = "Unnamed"
+    command_format: CommandFormat
 
-class CustomCommandInterface(BaseCommand):
-    name = "Unnamed"
-    command_format: CommandFormat = None
+    def __init__(self, parameters):
+        super().__init__(parameters)
 
-    def __init__(self, cmd):
-        super().__init__()
+    def execute(self):
+        if not self.command_format:
+            raise TypeError("No command format")
+
+        return self.command_format
