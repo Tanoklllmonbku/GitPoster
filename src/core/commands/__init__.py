@@ -36,6 +36,7 @@ class CommandFactory:
 
 
 def reg_custom_command(config: dict):
+    """Function for register custom command."""
     if not isinstance(config, dict):
         raise ValueError("config is not a dict")
     CommandFactory.reg_from_cfg(config)
@@ -43,6 +44,7 @@ def reg_custom_command(config: dict):
     return CommandFactory(config.get("name"))
 
 def return_base_command(name:str, parameters:dict):
+    """Function for getting base command by it`s name."""
     factory = CommandFactory(name)
     result = factory(parameters)
     return result().command, result().cwd

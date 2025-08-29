@@ -3,7 +3,7 @@ from .command_format import CommandFormat
 
 
 class BaseCommand(ABC):
-    """Interface for using git commands"""
+    """Parent class for creating git commands"""
     def __init__(self, parameters):
         self.parameters = parameters
 

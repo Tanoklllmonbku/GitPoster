@@ -1,4 +1,3 @@
-# core/git_exec.py
 import subprocess
 from typing import List, Tuple
 import os
@@ -7,8 +6,7 @@ from .commands.AbsClass import CommandFormat
 ON_WINDOWS = os.name == "nt"
 
 class GitExecutor:
-    """Выполняет Git-команды и возвращает результат"""
-
+    """Execute git commands"""
     def execute(self, command: List[str], cwd) -> Tuple[bool, str, str]:
         try:
             result = subprocess.run(

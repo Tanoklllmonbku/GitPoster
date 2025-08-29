@@ -4,6 +4,7 @@ from src.core.commands import CommandFactory
 
 @CommandFactory.reg('log')
 class Log(BaseCommand):
+    """Git log command realisation"""
     def __init__(self, parameters:dict):
         super().__init__(parameters)
         self.cmd = parameters.get("cmd")

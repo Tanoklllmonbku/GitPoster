@@ -8,6 +8,7 @@ from src.core.commands import CommandFactory
 
 @CommandFactory.reg("Init")
 class Init(BaseCommand):
+    """Git init command realisation"""
     def __init__(self, parameters:dict):
         super().__init__(parameters)
         self.cwd = parameters.get("cwd")

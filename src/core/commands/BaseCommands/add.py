@@ -4,6 +4,7 @@ from src.core.commands import CommandFactory
 
 @CommandFactory.reg('add')
 class Add(BaseCommand):
+    """Git add command realisation"""
     def __init__(self, parameters:dict):
         super().__init__(parameters)
         self.files = parameters.get("files")

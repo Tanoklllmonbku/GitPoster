@@ -4,6 +4,7 @@ from src.core.commands import CommandFactory
 
 @CommandFactory.reg('clone')
 class Clone(BaseCommand):
+    """Git clone command realisation"""
     def __init__(self, parameters:dict):
         super().__init__(parameters)
         self.url = parameters.get("url")

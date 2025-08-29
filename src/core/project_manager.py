@@ -1,4 +1,3 @@
-# core/project_manager.py
 from pathlib import Path
 import logging
 
@@ -12,7 +11,7 @@ CONFIG_PATH = "config/user_config.json"
 
 
 class ProjectManager:
-    """Управление Git-проектом"""
+    """Managing Git-project"""
     command_name: str
 
     def __init__(self, project_dir: Path, logger: logging.Logger):

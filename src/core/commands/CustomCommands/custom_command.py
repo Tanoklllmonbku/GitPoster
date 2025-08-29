@@ -1,6 +1,7 @@
 from src.core.commands import BaseCommand, CommandFormat
 
 class CustomCommand(BaseCommand):
+    """Child class of BaseCommand for create custom commands"""
     name:str = "Unnamed"
     command_format: CommandFormat
 

@@ -4,6 +4,7 @@ from src.core.commands import CommandFactory
 
 @CommandFactory.reg("branch")
 class Branch(BaseCommand):
+    """Git branch command realisation"""
     def __init__(self, parameters:dict):
         super().__init__(parameters)
         self.message = parameters.get("message")
