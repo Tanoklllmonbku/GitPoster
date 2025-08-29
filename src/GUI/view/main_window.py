@@ -2,9 +2,9 @@
 from PyQt6.QtWidgets import (
     QWidget, QHBoxLayout, QVBoxLayout, QStackedWidget, QFrame, QPushButton
 )
-from .git_work_window import GitWorkWindow
-from .initialize_git_window import InitializeWindow
-from .settings_window import SettingsWindow
+from src.GUI.view.git_work_window import GitWorkWindow
+from src.GUI.view.initialize_git_window import InitializeWindow
+from src.GUI.view.settings_window import SettingsWindow
 
 
 class MainWindow(QWidget):
